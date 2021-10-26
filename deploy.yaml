@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    k8s-app: gpu-memory-monitor
+  name: gpu-memory-monitor
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      k8s-app: gpu-memory-monitor
+  template:
+    metadata:
+      labels:
+        k8s-app: gpu-memory-monitor
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: gpushare
+                    operator: In
+                    values:
+                      - "true"
+      containers:
+        - env:
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: all
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: utility
+          image: gpu-memory-monitor:v1
+          imagePullPolicy: IfNotPresent
+          name: gpu-memory-monitor
+          resources:
+            requests:
+              cpu: 500m
+          volumeMounts:
+            - mountPath: /var/run
+              name: docker-sock
+              readOnly: false
+      hostNetwork: true
+      restartPolicy: Always
+      volumes:
+        - hostPath:
+            path: /var/run
+          name: docker-sock
