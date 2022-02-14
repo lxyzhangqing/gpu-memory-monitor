@@ -7,20 +7,23 @@ import (
 	"log"
 )
 
-func GetProcessInfo() ([]types.PodResourceUsage, error) {
+func Init() error {
 	err := nvml.Init()
 	if err != nil {
 		log.Printf("Unable to initialize NVML: %v", err)
-		return nil, err
+		return err
 	}
+	return nil
+}
 
-	defer func() {
-		err := nvml.Shutdown()
-		if err != nil {
-			log.Printf("Unable to shutdown NVML: %v", err)
-		}
-	}()
+func Finish() {
+	err := nvml.Shutdown()
+	if err != nil {
+		log.Printf("Unable to shutdown NVML: %v", err)
+	}
+}
 
+func GetProcessInfo() ([]types.PodResourceUsage, error) {
 	count, err := nvml.GetDeviceCount()
 	if err != nil {
 		log.Printf("Unable to get device count: %v", err)

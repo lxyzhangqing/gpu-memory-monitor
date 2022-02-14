@@ -19,5 +19,10 @@ func main() {
 		log.Fatalf("gpu-type is invalid, please check")
 	}
 
+	if err := gpu.Init(); err != nil {
+		log.Fatalf("gpu device init failed: %v", err)
+	}
+	defer gpu.Finish()
+
 	metrics.HandleMetrics()
 }
