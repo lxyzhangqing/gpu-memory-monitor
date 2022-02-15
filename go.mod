@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/NVIDIA/gpu-monitoring-tools v0.0.0-20210817155834-f476d8a022cf
-	github.com/containerd/containerd v1.5.7 // indirect
+	github.com/containerd/containerd v1.5.9 // indirect
 	github.com/docker/docker v20.10.9+incompatible
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
